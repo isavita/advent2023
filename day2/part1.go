@@ -67,5 +67,5 @@ func main() {
 		fmt.Println("Error reading file:", err)
 	}
 
-	fmt.Println("Sum of valid game IDs:", totalSum)
+	fmt.Println(totalSum)
 }

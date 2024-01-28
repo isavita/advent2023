@@ -52,5 +52,5 @@ func main() {
 	}
 
 	// Output the result
-	fmt.Println("Sum of calibration values:", sum)
+	fmt.Println(sum)
 }

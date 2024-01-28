@@ -27,7 +27,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("The sum of all calibration values is:", sum)
+	fmt.Println(sum)
 }
 
 func findFirstAndLastDigit(line string) (int, int) {

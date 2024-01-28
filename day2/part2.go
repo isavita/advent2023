@@ -66,5 +66,5 @@ func main() {
 		fmt.Println("Error reading file:", err)
 	}
 
-	fmt.Println("Sum of the power of minimum sets:", totalPower)
+	fmt.Println(totalPower)
 }
