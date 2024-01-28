@@ -73,5 +73,5 @@ func main() {
 		}
 	}
 
-	fmt.Println("The lowest location number is:", minLocation)
+	fmt.Println(minLocation)
 }

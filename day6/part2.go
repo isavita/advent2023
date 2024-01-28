@@ -53,5 +53,5 @@ func main() {
 
 	waysToWin := calculateWaysToWinLongRace(time, distance)
 
-	fmt.Println("Total number of ways to win the race:", waysToWin)
+	fmt.Println(waysToWin)
 }

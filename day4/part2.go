@@ -2,89 +2,80 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
-	"strconv"
+	"os"
+	"regexp"
 	"strings"
 )
 
-func main() {
-	// Read input from input.txt
-	data, err := ioutil.ReadFile("day4/input.txt")
-	if err != nil {
-		log.Fatal(err)
+type Card struct {
+	winnings   map[string]int
+	givens     map[string]int
+	totalCount int
+}
+
+func getPointsForCard(card Card) int {
+	points := 0
+	for given, count := range card.givens {
+		if winningCount, ok := card.winnings[given]; ok {
+			points += count * winningCount
+		}
+	}
+	return points
+}
+
+func lexLineIntoCard(line string) Card {
+	_, cardDataStr, _ := strings.Cut(line, ": ")
+	cardData := strings.Split(cardDataStr, " | ")
+
+	re := regexp.MustCompile("[0-9]{1,2}")
+
+	winnings := make(map[string]int)
+	for _, point := range re.FindAllString(cardData[0], -1) {
+		winnings[point]++
 	}
 
-	// Split the input into individual lines
-	lines := strings.Split(string(data), "\n")
+	givens := make(map[string]int)
+	for _, point := range re.FindAllString(cardData[1], -1) {
+		givens[point]++
+	}
 
-	// Create a map to store the cards and their winning numbers
-	cards := make(map[int][]int)
+	return Card{
+		winnings:   winnings,
+		givens:     givens,
+		totalCount: 1,
+	}
+}
 
-	// Parse the input and populate the cards map
-	for _, line := range lines {
-		if line == "" {
+func main() {
+	file, err := os.ReadFile("day4/input.txt")
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
+	}
+	input := strings.TrimSpace(string(file))
+
+	var cards []Card
+
+	for _, line := range strings.Split(input, "\n") {
+		if len(line) == 0 {
 			continue
 		}
-		parts := strings.Split(line, " | ")
-		cardNum, err := strconv.Atoi(strings.Split(parts[0], ":")[1])
-		if err != nil {
-			log.Fatal(err)
-		}
-		nums := strings.Fields(parts[1])
-		var cardNums []int
-		for _, num := range nums {
-			n, err := strconv.Atoi(num)
-			if err != nil {
-				log.Fatal(err)
-			}
-			cardNums = append(cardNums, n)
-		}
-		cards[cardNum] = cardNums
+		card := lexLineIntoCard(line)
+		cards = append(cards, card)
 	}
 
-	// Initialize a map to store the count of each card
-	cardCounts := make(map[int]int)
+	for i, card := range cards {
+		points := getPointsForCard(card)
 
-	// Initialize a map to store the copies of cards won
-	copies := make(map[int]int)
-
-	// Process the original and copied scratchcards until no more scratchcards are won
-	for len(cards) > 0 {
-		for cardNum, card := range cards {
-			cardCount := cardCounts[cardNum]
-			copyCount := copies[cardNum]
-
-			// If there are no copies left, process the original card
-			if copyCount == 0 {
-				for _, num := range card {
-					if _, ok := cardCounts[num]; ok {
-						cardCounts[num] += 1 << cardCount
-					}
-				}
-				copies[cardNum] = 1
-			} else {
-				// Process the copies of the card
-				for i := 1; i <= copyCount; i++ {
-					for _, num := range card {
-						if _, ok := cardCounts[num]; ok {
-							cardCounts[num] += 1 << (cardCount + i)
-						}
-					}
-					copies[cardNum] = 0
-				}
-			}
-
-			// Remove the processed card from the original cards map
-			delete(cards, cardNum)
+		for j := 1; j <= points; j++ {
+			cards[i+j].totalCount += 1 * cards[i].totalCount
 		}
 	}
 
-	// Calculate the total scratchcards won
-	totalScratchcards := 0
-	for _, count := range cardCounts {
-		totalScratchcards += count
+	totalCards := 0
+	for _, card := range cards {
+		totalCards += card.totalCount
 	}
 
-	fmt.Println("Total scratchcards won:", totalScratchcards)
+	fmt.Println(totalCards)
 }

@@ -62,5 +62,5 @@ func main() {
 		totalWays *= ways
 	}
 
-	fmt.Println("Total number of ways to win all races:", totalWays)
+	fmt.Println(totalWays)
 }

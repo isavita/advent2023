@@ -31,7 +31,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Total points:", totalPoints)
+	fmt.Println(totalPoints)
 }
 
 func convertToIntSlice(str string) []int {

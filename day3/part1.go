@@ -18,7 +18,7 @@ func main() {
 
 	// Calculate the sum of all part numbers.
 	sum := sumOfPartNumbers(matrix)
-	fmt.Println("Sum of part numbers:", sum)
+	fmt.Println(sum)
 }
 
 // readFileToMatrix reads the file and converts it into a 2D slice of runes.

@@ -83,7 +83,7 @@ func main() {
 		}
 
 		if isInSeedRanges(seed, seedRanges) {
-			fmt.Println("The lowest location number is:", location)
+			fmt.Println(location)
 			break
 		}
 	}
